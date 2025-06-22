@@ -1,0 +1,22 @@
+# Flutter / Dart
+.dart_tool/
+build/
+.packages
+pubspec.lock
+
+# Android
+android/local.properties
+**/*.iml
+.gradle/
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+Runner.xcworkspace/
+
+# IDE
+.idea/
+.vscode/
+
+# Log dosyaları
+*.log
