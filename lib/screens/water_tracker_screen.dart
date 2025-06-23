@@ -12,7 +12,7 @@ class WaterTrackerScreen extends StatefulWidget {
 
 class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
   int _waterConsumed = 0;
-  int _dailyGoal = 2000;               // artık dinamik
+  int _dailyGoal = 2000;
   int _caffeineConsumed = 0;
   final int _dailyCaffeineLimit = 400;
 
@@ -24,11 +24,10 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
 
   Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
-    final weight = prefs.getDouble('weight') ?? 60.0; // default 60kg
+    final weight = prefs.getDouble('weight') ?? 60.0;
     setState(() {
       _waterConsumed = prefs.getInt('waterConsumed') ?? 0;
       _caffeineConsumed = prefs.getInt('caffeineConsumed') ?? 0;
-      // Formül: 0.035 × kilo(kg) × 1000 = ml
       _dailyGoal = (0.035 * weight * 1000).toInt();
     });
   }
@@ -39,6 +38,14 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
     await prefs.setInt('caffeineConsumed', _caffeineConsumed);
   }
 
+  void _resetData() {
+    setState(() {
+      _waterConsumed = 0;
+      _caffeineConsumed = 0;
+    });
+    _saveData();
+  }
+
   void _addWater() {
     setState(() {
       _waterConsumed = (_waterConsumed + 200).clamp(0, _dailyGoal);
@@ -47,14 +54,8 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
   }
 
   void _addDrink(String type) {
-    int addedWater = 0, addedCaffeine = 0;
-    if (type == 'coffee') {
-      addedWater = 200;
-      addedCaffeine = 95;
-    } else if (type == 'tea') {
-      addedWater = 200;
-      addedCaffeine = 47;
-    }
+    int addedWater = type == 'coffee' ? 200 : 200;
+    int addedCaffeine = type == 'coffee' ? 95 : 47;
     setState(() {
       _waterConsumed = (_waterConsumed + addedWater).clamp(0, _dailyGoal);
       _caffeineConsumed = (_caffeineConsumed + addedCaffeine).clamp(0, _dailyCaffeineLimit);
@@ -76,18 +77,12 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
           ListTile(
             leading: const Icon(Icons.local_cafe),
             title: const Text('Kahve (200 ml)'),
-            onTap: () {
-              Navigator.pop(context);
-              _addDrink('coffee');
-            },
+            onTap: () { Navigator.pop(context); _addDrink('coffee'); },
           ),
           ListTile(
             leading: const Icon(Icons.emoji_food_beverage),
             title: const Text('Çay (200 ml)'),
-            onTap: () {
-              Navigator.pop(context);
-              _addDrink('tea');
-            },
+            onTap: () { Navigator.pop(context); _addDrink('tea'); },
           ),
         ],
       ),
@@ -112,10 +107,13 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
                 context,
                 MaterialPageRoute(builder: (_) => const ProfileScreen()),
               );
-              if (updated == true) {
-                _loadData(); // Profil değişti, hedefi ve verileri tekrar yükle
-              }
+              if (updated == true) _loadData();
             },
+          ),
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Günlük Verileri Sıfırla',
+            onPressed: _resetData,
           ),
         ],
       ),
@@ -123,15 +121,11 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const SizedBox(height: 20),
-            const Text(
-              'Günlük Su Hedefi',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+            // --- su hedefi göstergesi
+            const Text('Günlük Su Hedefi', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             SizedBox(
-              height: 200,
-              width: 200,
+              height: 200, width: 200,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -141,28 +135,21 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
               ),
             ),
             const SizedBox(height: 30),
-            const Text(
-              'Günlük Kafein Takip',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+            // --- kafein göstergesi
+            const Text('Günlük Kafein Takip', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             SizedBox(
-              height: 200,
-              width: 200,
+              height: 200, width: 200,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  CircularProgressIndicator(
-                    value: caffeineProgress,
-                    strokeWidth: 12,
-                    color: Colors.brown,
-                  ),
+                  CircularProgressIndicator(value: caffeineProgress, strokeWidth: 12, color: Colors.brown),
                   Text('$_caffeineConsumed / $_dailyCaffeineLimit mg'),
                 ],
               ),
             ),
             const SizedBox(height: 30),
-            // ── Kaydırılabilir buton satırı ──
+            // --- buton satırı
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -184,7 +171,6 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
                 ],
               ),
             ),
-            // ───────────────────────────
           ],
         ),
       ),
