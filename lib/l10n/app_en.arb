@@ -16,5 +16,17 @@
   "languageSelection": "Language Selection",
   "age": "Age",
   "weight": "Weight",
-  "gender": "Gender"
+  "gender": "Gender",
+  "theme": "Theme",
+  "themeSystem": "System Default",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "drinkWaterNotificationTitle": "Time to drink water!",
+  "drinkWaterNotificationBody": "Stay hydrated for your health.",
+  "reminder": "Reminder",
+  "reminderFrequency": "Reminder Frequency",
+  "reminderOff": "Off",
+  "reminderEvery2Hours": "Every 2 hours",
+  "reminderEvery4Hours": "Every 4 hours",
+  "reminderOnceNoon": "Once at noon"
 }

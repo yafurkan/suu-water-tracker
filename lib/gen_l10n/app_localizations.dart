@@ -205,6 +205,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Gender'**
   String get gender;
+
+  /// No description provided for @theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get theme;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System Default'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
+  /// No description provided for @drinkWaterNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to drink water!'**
+  String get drinkWaterNotificationTitle;
+
+  /// No description provided for @drinkWaterNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay hydrated for your health.'**
+  String get drinkWaterNotificationBody;
+
+  /// No description provided for @reminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get reminder;
+
+  /// No description provided for @reminderFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder Frequency'**
+  String get reminderFrequency;
+
+  /// No description provided for @reminderOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get reminderOff;
+
+  /// No description provided for @reminderEvery2Hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Every 2 hours'**
+  String get reminderEvery2Hours;
+
+  /// No description provided for @reminderEvery4Hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Every 4 hours'**
+  String get reminderEvery4Hours;
+
+  /// No description provided for @reminderOnceNoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Once at noon'**
+  String get reminderOnceNoon;
 }
 
 class _AppLocalizationsDelegate

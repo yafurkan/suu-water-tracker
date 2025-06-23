@@ -61,4 +61,41 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get gender => 'Cinsiyet';
+
+  @override
+  String get theme => 'Tema';
+
+  @override
+  String get themeSystem => 'Sistem Varsayılanı';
+
+  @override
+  String get themeLight => 'Açık';
+
+  @override
+  String get themeDark => 'Koyu';
+
+  @override
+  String get drinkWaterNotificationTitle => 'Su içme zamanı!';
+
+  @override
+  String get drinkWaterNotificationBody =>
+      'Sağlığınız için su içmeyi unutmayın.';
+
+  @override
+  String get reminder => 'Hatırlatıcı';
+
+  @override
+  String get reminderFrequency => 'Hatırlatma Sıklığı';
+
+  @override
+  String get reminderOff => 'Kapalı';
+
+  @override
+  String get reminderEvery2Hours => 'Her 2 saatte bir';
+
+  @override
+  String get reminderEvery4Hours => 'Her 4 saatte bir';
+
+  @override
+  String get reminderOnceNoon => 'Günde 1 kez (Öğlen)';
 }

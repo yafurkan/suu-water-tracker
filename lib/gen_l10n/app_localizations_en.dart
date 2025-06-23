@@ -62,4 +62,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gender => 'Gender';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get themeSystem => 'System Default';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get drinkWaterNotificationTitle => 'Time to drink water!';
+
+  @override
+  String get drinkWaterNotificationBody => 'Stay hydrated for your health.';
+
+  @override
+  String get reminder => 'Reminder';
+
+  @override
+  String get reminderFrequency => 'Reminder Frequency';
+
+  @override
+  String get reminderOff => 'Off';
+
+  @override
+  String get reminderEvery2Hours => 'Every 2 hours';
+
+  @override
+  String get reminderEvery4Hours => 'Every 4 hours';
+
+  @override
+  String get reminderOnceNoon => 'Once at noon';
 }
