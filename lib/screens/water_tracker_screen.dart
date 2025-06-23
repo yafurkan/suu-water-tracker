@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'profile_screen.dart';
 import 'statistics_screen.dart';
 
 class WaterTrackerScreen extends StatefulWidget {
@@ -11,8 +12,7 @@ class WaterTrackerScreen extends StatefulWidget {
 
 class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
   int _waterConsumed = 0;
-  final int _dailyGoal = 2000;
-
+  int _dailyGoal = 2000;               // artık dinamik
   int _caffeineConsumed = 0;
   final int _dailyCaffeineLimit = 400;
 
@@ -24,9 +24,12 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
 
   Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
+    final weight = prefs.getDouble('weight') ?? 60.0; // default 60kg
     setState(() {
       _waterConsumed = prefs.getInt('waterConsumed') ?? 0;
       _caffeineConsumed = prefs.getInt('caffeineConsumed') ?? 0;
+      // Formül: 0.035 × kilo(kg) × 1000 = ml
+      _dailyGoal = (0.035 * weight * 1000).toInt();
     });
   }
 
@@ -100,14 +103,31 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
       appBar: AppBar(
         title: const Text('Su ve Kafein Takip'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            tooltip: 'Profil',
+            onPressed: () async {
+              final updated = await Navigator.push<bool>(
+                context,
+                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+              );
+              if (updated == true) {
+                _loadData(); // Profil değişti, hedefi ve verileri tekrar yükle
+              }
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             const SizedBox(height: 20),
-            const Text('Günlük Su Hedefi',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text(
+              'Günlük Su Hedefi',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 10),
             SizedBox(
               height: 200,
@@ -121,8 +141,10 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
               ),
             ),
             const SizedBox(height: 30),
-            const Text('Günlük Kafein Takip',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text(
+              'Günlük Kafein Takip',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 10),
             SizedBox(
               height: 200,
@@ -131,13 +153,15 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
                 alignment: Alignment.center,
                 children: [
                   CircularProgressIndicator(
-                      value: caffeineProgress, strokeWidth: 12, color: Colors.brown),
+                    value: caffeineProgress,
+                    strokeWidth: 12,
+                    color: Colors.brown,
+                  ),
                   Text('$_caffeineConsumed / $_dailyCaffeineLimit mg'),
                 ],
               ),
             ),
             const SizedBox(height: 30),
-
             // ── Kaydırılabilir buton satırı ──
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -160,7 +184,7 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
                 ],
               ),
             ),
-            // ───────────────────────────────────────
+            // ───────────────────────────
           ],
         ),
       ),
