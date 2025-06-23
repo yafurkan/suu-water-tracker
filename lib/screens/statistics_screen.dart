@@ -7,6 +7,7 @@ class StatisticsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = [1200.0, 1500.0, 1700.0, 1600.0, 1800.0, 2000.0, 1900.0];
+    const days = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
 
     return Scaffold(
       appBar: AppBar(title: const Text('İstatistikler'), centerTitle: true),
@@ -22,7 +23,6 @@ class StatisticsScreen extends StatelessWidget {
             Expanded(
               child: BarChart(
                 BarChartData(
-                  alignment: BarChartAlignment.spaceAround,
                   maxY: 2200,
                   titlesData: FlTitlesData(
                     leftTitles: AxisTitles(
@@ -31,10 +31,8 @@ class StatisticsScreen extends StatelessWidget {
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          const days = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
-                          return Text(days[value.toInt()]);
-                        },
+                        getTitlesWidget: (value, _) =>
+                            Text(days[value.toInt()]),
                         interval: 1,
                       ),
                     ),

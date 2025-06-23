@@ -54,7 +54,7 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
   }
 
   void _addDrink(String type) {
-    int addedWater = type == 'coffee' ? 200 : 200;
+    int addedWater = 200;
     int addedCaffeine = type == 'coffee' ? 95 : 47;
     setState(() {
       _waterConsumed = (_waterConsumed + addedWater).clamp(0, _dailyGoal);
@@ -121,7 +121,6 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // --- su hedefi göstergesi
             const Text('Günlük Su Hedefi', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             SizedBox(
@@ -135,7 +134,6 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
               ),
             ),
             const SizedBox(height: 30),
-            // --- kafein göstergesi
             const Text('Günlük Kafein Takip', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             SizedBox(
@@ -149,7 +147,6 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
               ),
             ),
             const SizedBox(height: 30),
-            // --- buton satırı
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),

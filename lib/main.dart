@@ -5,7 +5,6 @@ import 'screens/water_tracker_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 🔔 Awesome Notifications başlatma
   await AwesomeNotifications().initialize(
     null, 
     [
@@ -17,15 +16,12 @@ Future<void> main() async {
         channelShowBadge: true,
       ),
     ],
-    debug: true,
   );
 
-  // 📲 İzin iste
   if (!await AwesomeNotifications().isNotificationAllowed()) {
     await AwesomeNotifications().requestPermissionToSendNotifications();
   }
 
-  // ⏰ Saatlik periyodik bildirim planla
   await AwesomeNotifications().createNotification(
     content: NotificationContent(
       id: 1,
