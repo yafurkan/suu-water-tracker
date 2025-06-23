@@ -197,7 +197,7 @@ abstract class AppLocalizations {
   /// No description provided for @weight.
   ///
   /// In en, this message translates to:
-  /// **'Weight'**
+  /// **'Weight (kg)'**
   String get weight;
 
   /// No description provided for @gender.
@@ -205,6 +205,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Gender'**
   String get gender;
+
+  /// No description provided for @male.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get male;
+
+  /// No description provided for @female.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get female;
+
+  /// No description provided for @other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get other;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @profileSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile saved!'**
+  String get profileSaved;
 
   /// No description provided for @theme.
   ///
@@ -277,6 +307,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Once at noon'**
   String get reminderOnceNoon;
+
+  /// No description provided for @selectPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Photo'**
+  String get selectPhoto;
 }
 
 class _AppLocalizationsDelegate

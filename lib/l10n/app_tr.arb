@@ -15,8 +15,13 @@
   "settings": "Ayarlar",
   "languageSelection": "Dil Seçimi",
   "age": "Yaş",
-  "weight": "Kilo",
+  "weight": "Kilo (kg)",
   "gender": "Cinsiyet",
+  "male": "Erkek",
+  "female": "Kadın",
+  "other": "Diğer",
+  "save": "Kaydet",
+  "profileSaved": "Profil kaydedildi!",
   "theme": "Tema",
   "themeSystem": "Sistem Varsayılanı",
   "themeLight": "Açık",
@@ -28,5 +33,6 @@
   "reminderOff": "Kapalı",
   "reminderEvery2Hours": "Her 2 saatte bir",
   "reminderEvery4Hours": "Her 4 saatte bir",
-  "reminderOnceNoon": "Günde 1 kez (Öğlen)"
+  "reminderOnceNoon": "Günde 1 kez (Öğlen)",
+  "selectPhoto": "Fotoğraf Seç"
 }

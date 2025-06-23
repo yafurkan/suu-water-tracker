@@ -58,10 +58,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get age => 'Age';
 
   @override
-  String get weight => 'Weight';
+  String get weight => 'Weight (kg)';
 
   @override
   String get gender => 'Gender';
+
+  @override
+  String get male => 'Male';
+
+  @override
+  String get female => 'Female';
+
+  @override
+  String get other => 'Other';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get profileSaved => 'Profile saved!';
 
   @override
   String get theme => 'Theme';
@@ -98,4 +113,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderOnceNoon => 'Once at noon';
+
+  @override
+  String get selectPhoto => 'Select Photo';
 }

@@ -15,8 +15,13 @@
   "settings": "Settings",
   "languageSelection": "Language Selection",
   "age": "Age",
-  "weight": "Weight",
+  "weight": "Weight (kg)",
   "gender": "Gender",
+  "male": "Male",
+  "female": "Female",
+  "other": "Other",
+  "save": "Save",
+  "profileSaved": "Profile saved!",
   "theme": "Theme",
   "themeSystem": "System Default",
   "themeLight": "Light",
@@ -28,5 +33,6 @@
   "reminderOff": "Off",
   "reminderEvery2Hours": "Every 2 hours",
   "reminderEvery4Hours": "Every 4 hours",
-  "reminderOnceNoon": "Once at noon"
+  "reminderOnceNoon": "Once at noon",
+  "selectPhoto": "Select Photo"
 }

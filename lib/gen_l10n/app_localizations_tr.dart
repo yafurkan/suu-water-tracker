@@ -57,10 +57,25 @@ class AppLocalizationsTr extends AppLocalizations {
   String get age => 'Yaş';
 
   @override
-  String get weight => 'Kilo';
+  String get weight => 'Kilo (kg)';
 
   @override
   String get gender => 'Cinsiyet';
+
+  @override
+  String get male => 'Erkek';
+
+  @override
+  String get female => 'Kadın';
+
+  @override
+  String get other => 'Diğer';
+
+  @override
+  String get save => 'Kaydet';
+
+  @override
+  String get profileSaved => 'Profil kaydedildi!';
 
   @override
   String get theme => 'Tema';
@@ -98,4 +113,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get reminderOnceNoon => 'Günde 1 kez (Öğlen)';
+
+  @override
+  String get selectPhoto => 'Fotoğraf Seç';
 }
