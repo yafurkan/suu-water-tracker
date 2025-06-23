@@ -5,14 +5,14 @@ import 'screens/water_tracker_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 🔔 Awesome Notifications başlatma (ikon=null olarak ayarlandı)
+  // 🔔 Awesome Notifications başlatma
   await AwesomeNotifications().initialize(
-    null, // artık null
+    null, 
     [
       NotificationChannel(
         channelKey: 'hourly_reminder',
         channelName: 'Saatlik Hatırlatmalar',
-        channelDescription: 'Her saat başı su içmeyi unutma! 💧',
+        channelDescription: 'Her saat başı su içmeyi hatırlatır',
         importance: NotificationImportance.Max,
         channelShowBadge: true,
       ),
@@ -37,16 +37,6 @@ Future<void> main() async {
       interval: const Duration(minutes: 60),
       timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier(),
       repeats: true,
-    ),
-  );
-
-  // 🔔 Test bildirimi: uygulama açılır açılmaz bu mesaj gelsin
-  await AwesomeNotifications().createNotification(
-    content: NotificationContent(
-      id: 999,
-      channelKey: 'hourly_reminder',
-      title: '🎉 Test Bildirimi',
-      body: 'Awesome Notifications çalışıyor! 💧',
     ),
   );
 

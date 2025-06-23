@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'statistics_screen.dart';
 
 class WaterTrackerScreen extends StatefulWidget {
   const WaterTrackerScreen({Key? key}) : super(key: key);
@@ -37,15 +38,13 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
 
   void _addWater() {
     setState(() {
-      _waterConsumed += 200;
-      if (_waterConsumed > _dailyGoal) _waterConsumed = _dailyGoal;
+      _waterConsumed = (_waterConsumed + 200).clamp(0, _dailyGoal);
     });
     _saveData();
   }
 
   void _addDrink(String type) {
-    int addedWater = 0;
-    int addedCaffeine = 0;
+    int addedWater = 0, addedCaffeine = 0;
     if (type == 'coffee') {
       addedWater = 200;
       addedCaffeine = 95;
@@ -54,29 +53,23 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
       addedCaffeine = 47;
     }
     setState(() {
-      _waterConsumed += addedWater;
-      if (_waterConsumed > _dailyGoal) _waterConsumed = _dailyGoal;
-      _caffeineConsumed += addedCaffeine;
-      if (_caffeineConsumed > _dailyCaffeineLimit) {
-        _caffeineConsumed = _dailyCaffeineLimit;
-      }
+      _waterConsumed = (_waterConsumed + addedWater).clamp(0, _dailyGoal);
+      _caffeineConsumed = (_caffeineConsumed + addedCaffeine).clamp(0, _dailyCaffeineLimit);
     });
     _saveData();
     if (_caffeineConsumed >= _dailyCaffeineLimit) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('⚠️ Günlük kafein sınırını aştınız!'),
-        ),
+        const SnackBar(content: Text('⚠️ Günlük kafein sınırını aştınız!')),
       );
     }
   }
 
   void _showDrinkOptions() {
-    showModalBottomSheet<void>(
+    showModalBottomSheet(
       context: context,
       builder: (_) => Column(
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
+        children: [
           ListTile(
             leading: const Icon(Icons.local_cafe),
             title: const Text('Kahve (200 ml)'),
@@ -100,8 +93,8 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double waterProgress = _waterConsumed / _dailyGoal;
-    final double caffeineProgress = _caffeineConsumed / _dailyCaffeineLimit;
+    final waterProgress = _waterConsumed / _dailyGoal;
+    final caffeineProgress = _caffeineConsumed / _dailyCaffeineLimit;
 
     return Scaffold(
       appBar: AppBar(
@@ -109,64 +102,65 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
-          children: <Widget>[
+          children: [
             const SizedBox(height: 20),
-            const Text(
-              'Günlük Su Hedefi',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+            const Text('Günlük Su Hedefi',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             SizedBox(
               height: 200,
               width: 200,
               child: Stack(
                 alignment: Alignment.center,
-                children: <Widget>[
-                  CircularProgressIndicator(
-                    value: waterProgress,
-                    strokeWidth: 12,
-                  ),
+                children: [
+                  CircularProgressIndicator(value: waterProgress, strokeWidth: 12),
                   Text('$_waterConsumed / $_dailyGoal ml'),
                 ],
               ),
             ),
             const SizedBox(height: 30),
-            const Text(
-              'Günlük Kafein Takip',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+            const Text('Günlük Kafein Takip',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             SizedBox(
               height: 200,
               width: 200,
               child: Stack(
                 alignment: Alignment.center,
-                children: <Widget>[
+                children: [
                   CircularProgressIndicator(
-                    value: caffeineProgress,
-                    strokeWidth: 12,
-                    color: Colors.brown,
-                  ),
+                      value: caffeineProgress, strokeWidth: 12, color: Colors.brown),
                   Text('$_caffeineConsumed / $_dailyCaffeineLimit mg'),
                 ],
               ),
             ),
             const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: _addWater,
-                  child: const Text('200 ml Su Ekle'),
-                ),
-                ElevatedButton(
-                  onPressed: _showDrinkOptions,
-                  child: const Text('İçecek Ekle'),
-                ),
-              ],
+
+            // ── Kaydırılabilir buton satırı ──
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  ElevatedButton(onPressed: _addWater, child: const Text('200 ml Su Ekle')),
+                  const SizedBox(width: 12),
+                  ElevatedButton(onPressed: _showDrinkOptions, child: const Text('İçecek Ekle')),
+                  const SizedBox(width: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const StatisticsScreen()),
+                      );
+                    },
+                    child: const Text('İstatistikler'),
+                  ),
+                ],
+              ),
             ),
+            // ───────────────────────────────────────
           ],
         ),
       ),
