@@ -1,0 +1,20 @@
+{
+  "appTitle": "Suu",
+  "waterTracker": "Water Tracker",
+  "dailyGoal": "Daily Water Goal",
+  "addWater": "Add 200 ml Water",
+  "addDrink": "Add Drink",
+  "statistics": "Statistics",
+  "profile": "Profile",
+  "reset": "Reset Daily Data",
+  "coffee": "Coffee (200 ml)",
+  "tea": "Tea (200 ml)",
+  "caffeineLimitWarning": "⚠️ You have exceeded your daily caffeine limit!",
+  "addDrinkButton": "Add Drink",
+  "dailyCaffeine": "Daily Caffeine Tracker",
+  "settings": "Settings",
+  "languageSelection": "Language Selection",
+  "age": "Age",
+  "weight": "Weight",
+  "gender": "Gender"
+}

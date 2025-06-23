@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'gen_l10n/app_localizations.dart';
 import 'screens/water_tracker_screen.dart';
+import 'screens/settings_screen.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await AwesomeNotifications().initialize(
@@ -39,8 +42,21 @@ Future<void> main() async {
   runApp(const SuuApp());
 }
 
-class SuuApp extends StatelessWidget {
+class SuuApp extends StatefulWidget {
   const SuuApp({Key? key}) : super(key: key);
+
+  @override
+  State<SuuApp> createState() => _SuuAppState();
+}
+
+class _SuuAppState extends State<SuuApp> {
+  Locale _selectedLocale = const Locale('tr');
+
+  void _changeLocale(Locale locale) {
+    setState(() {
+      _selectedLocale = locale;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +64,43 @@ class SuuApp extends StatelessWidget {
       title: 'Suu',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const WaterTrackerScreen(),
+      home: Builder(
+        builder: (context) => WaterTrackerScreen(
+          onSettingsPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => SettingsScreen(
+                  currentLocale: _selectedLocale,
+                  onLocaleChanged: (locale) {
+                    _changeLocale(locale);
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('tr'),
+        Locale('en'),
+      ],
+      locale: _selectedLocale,
+      localeResolutionCallback: (locale, supportedLocales) {
+        for (var supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale?.languageCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first;
+      },
     );
   }
 }

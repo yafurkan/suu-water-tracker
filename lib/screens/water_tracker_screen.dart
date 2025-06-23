@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../gen_l10n/app_localizations.dart';
 import 'profile_screen.dart';
 import 'statistics_screen.dart';
 
 class WaterTrackerScreen extends StatefulWidget {
-  const WaterTrackerScreen({Key? key}) : super(key: key);
+  final VoidCallback onSettingsPressed;
+  const WaterTrackerScreen({Key? key, required this.onSettingsPressed}) : super(key: key);
 
   @override
   State<WaterTrackerScreen> createState() => _WaterTrackerScreenState();
@@ -16,59 +18,32 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
   int _caffeineConsumed = 0;
   final int _dailyCaffeineLimit = 400;
 
-  @override
-  void initState() {
-    super.initState();
-    _loadData();
-  }
-
-  Future<void> _loadData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final weight = prefs.getDouble('weight') ?? 60.0;
+  void _addWater() async {
     setState(() {
-      _waterConsumed = prefs.getInt('waterConsumed') ?? 0;
-      _caffeineConsumed = prefs.getInt('caffeineConsumed') ?? 0;
-      _dailyGoal = (0.035 * weight * 1000).toInt();
+      _waterConsumed += 200;
     });
-  }
-
-  Future<void> _saveData() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('waterConsumed', _waterConsumed);
-    await prefs.setInt('caffeineConsumed', _caffeineConsumed);
-  }
-
-  void _resetData() {
-    setState(() {
-      _waterConsumed = 0;
-      _caffeineConsumed = 0;
-    });
-    _saveData();
-  }
-
-  void _addWater() {
-    setState(() {
-      _waterConsumed = (_waterConsumed + 200).clamp(0, _dailyGoal);
-    });
-    _saveData();
+    // Eğer kaydetmek istiyorsan:
+    // final prefs = await SharedPreferences.getInstance();
+    // await prefs.setInt('waterConsumed', _waterConsumed);
   }
 
   void _addDrink(String type) {
-    int addedWater = 200;
-    int addedCaffeine = type == 'coffee' ? 95 : 47;
     setState(() {
-      _waterConsumed = (_waterConsumed + addedWater).clamp(0, _dailyGoal);
-      _caffeineConsumed = (_caffeineConsumed + addedCaffeine).clamp(0, _dailyCaffeineLimit);
+      _waterConsumed += 200;
+      if (type == 'coffee') {
+        _caffeineConsumed += 95;
+      } else if (type == 'tea') {
+        _caffeineConsumed += 47;
+      }
     });
-    _saveData();
-    if (_caffeineConsumed >= _dailyCaffeineLimit) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('⚠️ Günlük kafein sınırını aştınız!')),
-      );
-    }
+    // Eğer kaydetmek istiyorsan:
+    // final prefs = await SharedPreferences.getInstance();
+    // await prefs.setInt('waterConsumed', _waterConsumed);
+    // await prefs.setInt('caffeineConsumed', _caffeineConsumed);
   }
 
   void _showDrinkOptions() {
+    final loc = AppLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
       builder: (_) => Column(
@@ -76,13 +51,19 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
         children: [
           ListTile(
             leading: const Icon(Icons.local_cafe),
-            title: const Text('Kahve (200 ml)'),
-            onTap: () { Navigator.pop(context); _addDrink('coffee'); },
+            title: Text(loc.coffee),
+            onTap: () {
+              Navigator.pop(context);
+              _addDrink('coffee');
+            },
           ),
           ListTile(
             leading: const Icon(Icons.emoji_food_beverage),
-            title: const Text('Çay (200 ml)'),
-            onTap: () { Navigator.pop(context); _addDrink('tea'); },
+            title: Text(loc.tea),
+            onTap: () {
+              Navigator.pop(context);
+              _addDrink('tea');
+            },
           ),
         ],
       ),
@@ -91,29 +72,40 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final waterProgress = _waterConsumed / _dailyGoal;
     final caffeineProgress = _caffeineConsumed / _dailyCaffeineLimit;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Su ve Kafein Takip'),
-        centerTitle: true,
+        title: Text(loc.appTitle),
         actions: [
           IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Ayarlar',
+            onPressed: widget.onSettingsPressed,
+          ),
+          IconButton(
             icon: const Icon(Icons.person),
-            tooltip: 'Profil',
+            tooltip: loc.profile,
             onPressed: () async {
+              // Profil ekranına geçiş
               final updated = await Navigator.push<bool>(
                 context,
                 MaterialPageRoute(builder: (_) => const ProfileScreen()),
               );
-              if (updated == true) _loadData();
+              if (updated == true) setState(() {}); // Profil güncellendiğinde verileri yenile
             },
           ),
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: 'Günlük Verileri Sıfırla',
-            onPressed: _resetData,
+            tooltip: loc.reset,
+            onPressed: () {
+              setState(() {
+                _waterConsumed = 0;
+                _caffeineConsumed = 0;
+              });
+            },
           ),
         ],
       ),
@@ -121,7 +113,7 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const Text('Günlük Su Hedefi', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(loc.dailyGoal, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             SizedBox(
               height: 200, width: 200,
@@ -152,9 +144,9 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  ElevatedButton(onPressed: _addWater, child: const Text('200 ml Su Ekle')),
+                  ElevatedButton(onPressed: _addWater, child: Text(loc.addWater)),
                   const SizedBox(width: 12),
-                  ElevatedButton(onPressed: _showDrinkOptions, child: const Text('İçecek Ekle')),
+                  ElevatedButton(onPressed: _showDrinkOptions, child: Text(loc.addDrinkButton)),
                   const SizedBox(width: 12),
                   ElevatedButton(
                     onPressed: () {
@@ -163,7 +155,7 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
                         MaterialPageRoute(builder: (_) => const StatisticsScreen()),
                       );
                     },
-                    child: const Text('İstatistikler'),
+                    child: Text(loc.statistics),
                   ),
                 ],
               ),

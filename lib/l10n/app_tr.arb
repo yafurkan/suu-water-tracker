@@ -1,0 +1,20 @@
+{
+  "appTitle": "Suu",
+  "waterTracker": "Su Takip",
+  "dailyGoal": "Günlük Su Hedefi",
+  "addWater": "200 ml Su Ekle",
+  "addDrink": "İçecek Ekle",
+  "addDrinkButton": "İçecek Ekle",
+  "statistics": "İstatistikler",
+  "profile": "Profil",
+  "reset": "Günlük Verileri Sıfırla",
+  "coffee": "Kahve (200 ml)",
+  "tea": "Çay (200 ml)",
+  "caffeineLimitWarning": "⚠️ Günlük kafein sınırını aştınız!",
+  "dailyCaffeine": "Günlük Kafein Takip",
+  "settings": "Ayarlar",
+  "languageSelection": "Dil Seçimi",
+  "age": "Yaş",
+  "weight": "Kilo",
+  "gender": "Cinsiyet"
+}
