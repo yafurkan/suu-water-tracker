@@ -4,6 +4,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'gen_l10n/app_localizations.dart';
 import 'screens/water_tracker_screen.dart';
 import 'screens/settings_screen.dart';
+import '../models/drink_entry.dart';
+import '../utils/drink_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -185,3 +187,4 @@ Future<void> scheduleReminder(BuildContext context, ReminderFrequency freq) asyn
     );
   }
 }
+

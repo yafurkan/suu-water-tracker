@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../gen_l10n/app_localizations.dart';
 import 'profile_screen.dart';
 import 'statistics_screen.dart';
+import '../models/drink_entry.dart';
+import '../utils/drink_storage.dart';
 
 class WaterTrackerScreen extends StatefulWidget {
   final VoidCallback onSettingsPressed;
@@ -22,24 +24,35 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
     setState(() {
       _waterConsumed += 200;
     });
-    // Eğer kaydetmek istiyorsan:
-    // final prefs = await SharedPreferences.getInstance();
-    // await prefs.setInt('waterConsumed', _waterConsumed);
+    // DrinkEntry kaydı ekle
+    final entry = DrinkEntry(
+      date: DateTime.now(),
+      amount: 200,
+      type: 'water',
+      caffeine: 0,
+    );
+    await DrinkStorage.addEntry(entry);
   }
 
-  void _addDrink(String type) {
+  void _addDrink(String type) async {
+    int caffeine = 0;
+    if (type == 'coffee') {
+      caffeine = 95;
+    } else if (type == 'tea') {
+      caffeine = 47;
+    }
     setState(() {
       _waterConsumed += 200;
-      if (type == 'coffee') {
-        _caffeineConsumed += 95;
-      } else if (type == 'tea') {
-        _caffeineConsumed += 47;
-      }
+      _caffeineConsumed += caffeine;
     });
-    // Eğer kaydetmek istiyorsan:
-    // final prefs = await SharedPreferences.getInstance();
-    // await prefs.setInt('waterConsumed', _waterConsumed);
-    // await prefs.setInt('caffeineConsumed', _caffeineConsumed);
+    // DrinkEntry kaydı ekle
+    final entry = DrinkEntry(
+      date: DateTime.now(),
+      amount: 200,
+      type: type,
+      caffeine: caffeine.toDouble(),
+    );
+    await DrinkStorage.addEntry(entry);
   }
 
   void _showDrinkOptions() {
@@ -156,6 +169,22 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
                       );
                     },
                     child: Text(loc.statistics),
+                  ),
+                  const SizedBox(width: 12),
+                  ElevatedButton(
+                    onPressed: () async {
+                      final entry = DrinkEntry(
+                        date: DateTime.now(),
+                        amount: 200,
+                        type: 'tea',
+                        caffeine: 40,
+                      );
+                      await DrinkStorage.addEntry(entry);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('İçecek kaydedildi!')),
+                      );
+                    },
+                    child: const Text('Çay Ekle'),
                   ),
                 ],
               ),
