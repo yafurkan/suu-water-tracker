@@ -1,7 +1,7 @@
 class UserProfile {
-  int age;
-  double weight;
-  String gender;
+  final String gender; // "male" veya "female"
+  final int age;
+  final double weight; // kilogram
   String? photoPath;
 
   UserProfile({
@@ -24,4 +24,12 @@ class UserProfile {
     gender: map['gender'] ?? 'other',
     photoPath: map['photoPath'],
   );
+
+  double get dailyWaterGoal {
+    if (gender == "male") {
+      return weight * 35; // ml
+    } else {
+      return weight * 31; // ml
+    }
+  }
 }

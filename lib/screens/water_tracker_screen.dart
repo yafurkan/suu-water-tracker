@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/user_profile.dart';
+import '../utils/profile_storage.dart';
 
 class WaterTrackerScreen extends StatefulWidget {
   const WaterTrackerScreen({Key? key}) : super(key: key);
@@ -10,23 +12,34 @@ class WaterTrackerScreen extends StatefulWidget {
 
 class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
   int _waterConsumed = 0;
-  final int _dailyGoal = 2000;
+  int _dailyGoal = 2000;
+  UserProfile? _userProfile;
 
   @override
   void initState() {
     super.initState();
-    _loadWaterData();
+    _loadUserProfileAndWaterData();
   }
 
-  // Cihazdan önceki su verisini yükler
-  Future<void> _loadWaterData() async {
+  Future<void> _loadUserProfileAndWaterData() async {
     final prefs = await SharedPreferences.getInstance();
+    final age = prefs.getInt('age') ?? 0;
+    final weight = prefs.getDouble('weight') ?? 0.0;
+    final gender = prefs.getString('gender') ?? 'male';
+
+    double dailyGoal = 2000;
+    if (weight > 0) {
+      dailyGoal = gender == 'male' ? weight * 35 : weight * 31;
+    }
+
+    print('OKUNDU: age=$age, weight=$weight, gender=$gender, dailyGoal=$dailyGoal');
+
     setState(() {
+      _dailyGoal = dailyGoal.round();
       _waterConsumed = prefs.getInt('waterConsumed') ?? 0;
     });
   }
 
-  // Güncel su verisini cihazda saklar
   Future<void> _saveWaterData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('waterConsumed', _waterConsumed);
@@ -40,6 +53,16 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
     _saveWaterData();
   }
 
+  void _openProfileScreen() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ProfileScreen()),
+    );
+    if (result == true) {
+      _loadUserProfileAndWaterData();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final double progress = _waterConsumed / _dailyGoal;
@@ -48,6 +71,12 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
       appBar: AppBar(
         title: const Text('Su Takip'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.person),
+            onPressed: _openProfileScreen,
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

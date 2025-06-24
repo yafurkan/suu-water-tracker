@@ -81,8 +81,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('age', int.parse(_ageCtrl.text));
     await prefs.setDouble('weight', double.parse(_weightCtrl.text));
-    await prefs.setString('gender', _gender!);
-    await prefs.setString('photoPath', _photoPath ?? '');
+    await prefs.setString('gender', _gender ?? 'male');
+    print('KAYDEDİLDİ: age=${_ageCtrl.text}, weight=${_weightCtrl.text}, gender=$_gender');
     Navigator.pop(context, true);
   }
 
@@ -177,3 +177,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
