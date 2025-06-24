@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'gen_l10n/app_localizations.dart';
 import 'screens/water_tracker_screen.dart';
 import 'screens/settings_screen.dart';
@@ -46,22 +47,46 @@ class _SuuAppState extends State<SuuApp> {
   AppThemeMode _themeMode = AppThemeMode.system;
   ReminderFrequency _reminderFrequency = ReminderFrequency.off;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    // Tema
+    final themeIndex = prefs.getInt('themeMode') ?? 0;
+    setState(() {
+      _themeMode = AppThemeMode.values[themeIndex];
+    });
+    // Bildirim
+    final reminderIndex = prefs.getInt('reminderFrequency') ?? 0;
+    setState(() {
+      _reminderFrequency = ReminderFrequency.values[reminderIndex];
+    });
+  }
+
   void _changeLocale(Locale locale) {
     setState(() {
       _selectedLocale = locale;
     });
   }
 
-  void _changeTheme(AppThemeMode mode) {
+  void _changeTheme(AppThemeMode mode) async {
     setState(() {
       _themeMode = mode;
     });
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('themeMode', mode.index);
   }
 
-  void _changeReminder(ReminderFrequency freq) {
+  void _changeReminder(ReminderFrequency freq) async {
     setState(() {
       _reminderFrequency = freq;
     });
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('reminderFrequency', freq.index);
     scheduleReminder(context, freq);
   }
 
